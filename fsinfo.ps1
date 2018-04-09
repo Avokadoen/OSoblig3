@@ -5,10 +5,27 @@ Param(
 
     if ($PSBoundParameters.Count -ne 0){$directory = get-item $directory}
 
-    Write-Host $path
-    Write-Host $directory
-    $root = $directory.Root.Name -replace '\\','%'
-    Get-CimInstance Win32_logicaldisk -Filter ("DeviceID like '$root%'")|  Select-Object SystemName,@{Name="Drive Letter";Expression={$_.DeviceID}},
-                                                @{Name="Drive Label";Expression={$_.VolumeName}},`
-                                                @{Name="Size(MB)";Expression={"{0:N0}" -f [int]($_.Size / 1MB)}},`
-                                                @{Name="FreeSpace%";Expression={[math]::Round($_.FreeSpace / $_.Size,2)*100}}  | ft
+    $root = $directory.Root.Name -replace '\\',""
+    $partition = get-CimInstance Win32_LogicalDisk -Filter  ("DeviceID like '$root'")
+    $takenSpace =  100 - ((($partition).freespace / ($partition).Size) * 100)
+    Write-Output("Filen " + $directory.Name + " befinner seg paa " + $root +  " og er " + $takenSpace +  "% full" )
+
+    $fileCount = $directory.GetFiles().Count
+
+    Write-Output("Det finnes " + $fileCount + " filer.")
+
+
+    $prevSize = 0
+    $sumSize = 0
+    $fileName = ""
+    $directory.GetFiles() | ForEach-Object{
+      $sumSize = $sumSize + $_.Length
+      if($_.Length -gt $prevSize){
+        $prevSize = $_.Length
+        $fileName = $_.Name
+      }
+    }
+
+    Write-Output("Den storste filen er " + $path + "/" + $fileName)
+    Write-Output("som er " + $prevSize + "B stor." )
+    Write-Output("Gjennomsnittlig filstorrelse er " + $sumSize / $fileCount + "B.")
