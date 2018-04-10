@@ -1,7 +1,7 @@
-# How to run
+#How to run
 - go to repo directory in powershell and call scripts with .\*name*
 
-# Quality assurance
+#Quality assurance
 For this repo we used PSScriptAnalyzer which can be found at:
 https://github.com/PowerShell/PSScriptAnalyzer .
 
