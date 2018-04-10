@@ -27,6 +27,6 @@ Param(
       }
     }
 
-    Write-Output("Den storste filen er " + $path + "/" + $fileName)
+    Write-Output("Den storste filen er " + $path + "\" + $fileName)
     Write-Output("som er " + $prevSize + "B stor." )
     Write-Output("Gjennomsnittlig filstorrelse er " + $sumSize / $fileCount + "B.")

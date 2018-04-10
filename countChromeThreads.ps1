@@ -1,3 +1,3 @@
 # countChromeThreads.ps1
 
-Get-Process("chrome") |  %{$_.Name+" "+$_.Id+" "+($_.Threads).Count}
+Get-Process("chrome") |  ForEach-Object{$_.Name+" "+$_.Id+" "+($_.Threads).Count}
